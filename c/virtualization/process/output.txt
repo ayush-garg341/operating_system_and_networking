@@ -1,0 +1,3 @@
+FD returned by open: 1
+I am child with PID: 88708
+      39     146    1040 fork_wait_exec.c
