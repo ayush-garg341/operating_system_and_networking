@@ -1,0 +1,19 @@
+#include <stdio.h>
+
+#include "mythreads.h"
+
+int balance = 10;
+
+void* worker(void* arg) {
+    balance++; // unprotected access 
+    return NULL;
+}
+
+int main(int argc, char *argv[]) {
+    pthread_t p;
+    Pthread_create(&p, NULL, worker, NULL);
+    balance++; // unprotected access
+    Pthread_join(p, NULL);
+    printf("%d\n", balance);
+    return 0;
+}
