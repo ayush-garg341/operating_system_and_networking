@@ -215,4 +215,76 @@
             - com ( commercial purpose only ), edu ( educational institutes ), gov ( only by US govt ), mil ( military org ), net, org etc.
             - Maintained by ICANN
         - Authoritative servers
-            - 
+            - Every organization with a public website or email server provides DNS records. These records have hostname to IP address mappings stored for that organization.
+            - These records can either be stored on a dedicated DNS server for that organization or they can pay for a service provider to store the records on their server.
+            - This is the next link in the chain. If this server has the answer that we are looking for, the IP address that it has is finally returned to the client.
+            - However, this server may not have the sought after answer if the domain has a sub-domain. In that case, this server may point to a server that has records of the subdomain.
+            - For instance, if the DNS record for cs.stanford.edu is being looked for, a DNS server separate from ‘stanford.edu’ may hold records for the sub-domain 'cs.'
+        - Local DNS Cache
+            - DNS mappings are often also cached locally on the client end-system to avoid repetitive lookups and saves time for often visited websites.
+            - This is done via an entity called the local resolver library, which is part of the OS. The application makes an API call to this library.
+            - If the local resolver library does not have a cached answer for the client, it will contact the organization’s local DNS server.
+            - This local DNS server is typically configured on the client machine either using a protocol called **DHCP or can be configured statically**.
+        - Local DNS Servers
+            - Local DNS servers are usually the first point of contact after a client checks its local cache.
+            - These servers are generally **hosted at the ISP** and contain some mappings based on what websites users visit.
+
+    - Finding Authoritative name servers
+        ```
+        host -t ns google.com
+        ```
+        - Host is a DNS lookup utility.
+        - It is normally used to map hostnames to IP addresses.
+        - -t :- type flag
+        - ns specifies the type. It stands for the name server in this case.
+        ```
+        cat /etc/resolv.conf
+
+        To check IP address of your local DNS server
+        ```
+    - DNS: Records and messages
+        - The DNS distributed database consists of entities called RRs, or Resource Records.
+        - RRs contain some or all of the following values:
+            - Name of the domain
+            - Resource data (RDATA) provides information appropriate for the type of resource record.
+            - Type of the resource record.
+            - Time-to-live (TTL) is how long the record should be cached by the client in seconds.
+            - DNS Class. There are many types of classes but we’re mainly concerned with IN which implies the ‘Internet’ class.
+        - Type of resource records
+            - **Address type** or **A** addresses contain IPv4 address to hostname mappings.
+            - **Canonical name** or **CNAME** records are records of alias hostnames against actual hostnames.
+            - **Mail Exchanger** or **MX records** are records of the server that accepts email on behalf of a certain domain.
+        - DNS Messages
+            - There are a few kinds of DNS messages, out of which the most common are query and reply, and both have the same format.
+    - nslookup
+        - can be used to look at DNS records.
+        ```
+        nslookup -type=A google.com
+
+        Server:         2409:4053:287:34a2::28
+        Address:        2409:4053:287:34a2::28#53
+
+        Non-authoritative answer:
+        Name:   google.com
+        Address: 142.250.194.110
+        ```
+        - The first two lines are the IP address of the local DNS server.
+        - The last few lines return the type A RR that maps google.com to the IP address 142.250.194.110
+        - It says ‘non-authoritative’ because the answer is coming from a local DNS server’s cache, and not from Educative’s authoritative DNS server.
+        - If you’re wondering what TTL values look like, run with **-debug** flag
+    - dig
+        - command-line tool used to query DNS servers.
+        - dig stands for **domain information groper**, and it displays the actual messages that were received from DNS servers.
+
+- BitTorrent
+    - BitTorrent is a key protocol and has millions of users simultaneously and actively sharing and downloading hundreds of thousands of files of all types: music, movies, books, and so on.
+    - BitTorrent falls more in the hybrid category than pure P2P.
+    - Protocol for P2P file sharing.
+    - How it works ?
+        - Trackers and torrent files
+            - How do clients find peers to connect to ?
+                - Well, clients connect to a **special tracker node** first. The tracker responds with the IP and the port of a few other peers who are downloading the same file.
+                - Modern BitTorrent clients are trackerless and use a Distributed Hash Table instead
+            - But how do clients find the **tracker** in the first place ?
+                - Clients begin by downloading a ‘torrent file’ from a web server which has the URL of the tracker.
+                - The torrent file also contains a SHA1 hash of each file chunk.
