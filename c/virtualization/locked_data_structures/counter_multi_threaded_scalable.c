@@ -3,7 +3,7 @@
 #include "common.h"
 #include "common_threads.h"
 
-#define NUMCPUS 4
+#define NUMCPUS 8
 
 typedef struct __counter_t {
   int global;                     // global count
@@ -26,7 +26,6 @@ void init(counter_t *c, int threshold) {
 
 void update(counter_t *c, int threadID, int amt) {
   int cpu = threadID % NUMCPUS;
-  pthread_mutex_lock(&c->llock[cpu]);
   c->local[cpu] += amt;
   if (c->local[cpu] >= c->threshold) {
     pthread_mutex_lock(&c->glock);
@@ -34,7 +33,6 @@ void update(counter_t *c, int threadID, int amt) {
     pthread_mutex_unlock(&c->glock);
     c->local[cpu] = 0;
   }
-  pthread_mutex_unlock(&c->llock[cpu]);
 }
 
 int get(counter_t *c) {
@@ -73,7 +71,7 @@ int main(int argc, char *argv[])
     for(int i = 0; i < NUMCPUS; i++)
     {
         args[i].counter = counter;
-        args[i].count = 10000000;
+        args[i].count = 100000000;
         args[i].idx = i;
     }
 	double t = GetTime();
