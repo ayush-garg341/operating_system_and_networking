@@ -1,9 +1,9 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include "common.h"
-#include "common_threads.h"
+#include "../common.h"
+#include "../common_threads.h"
 
-#define NUMCPUS 8
+#define NUMCPUS 4
 
 typedef struct __counter_t {
   int global;                     // global count
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
     for(int i = 0; i < NUMCPUS; i++)
     {
         args[i].counter = counter;
-        args[i].count = 100000000;
+        args[i].count = 10000000;
         args[i].idx = i;
     }
 	double t = GetTime();

@@ -1,7 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include "common.h"
-#include "common_threads.h"
+#include "../common.h"
+#include "../common_threads.h"
 
 typedef struct __counter_t {
   int             value;
