@@ -57,3 +57,6 @@ int main(int argc, char *argv[])
     printf("%d\n", list_insert(l, 8));
     printf("%d\n", list_lookup(l, 3));
 }
+
+// Here we have single lock on insert and lookup. If we enable multiple threads, all will try to acquire and release same thread.
+// It is very hard in practice to have multiple locks and multiple threads to make it faster than simple grabbing a single lock.
