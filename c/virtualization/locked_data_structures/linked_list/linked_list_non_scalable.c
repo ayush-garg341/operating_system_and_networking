@@ -19,14 +19,13 @@ void list_init(list_t *l){
 }
 
 int list_insert(list_t *l, int key){
-    Pthread_mutex_lock(&l->lock);
     node_t *new_node = malloc(sizeof(node_t));
     if (new_node == NULL){
         perror("malloc");
-        pthread_mutex_unlock(&l->lock);
         return -1;
     }
     new_node->key = key;
+    Pthread_mutex_lock(&l->lock);
     new_node->next = l->head;
     l->head = new_node;
     Pthread_mutex_unlock(&l->lock);
@@ -35,17 +34,18 @@ int list_insert(list_t *l, int key){
 
 int list_lookup(list_t *l, int key)
 {
+    int rv = -1;
     Pthread_mutex_lock(&l->lock);
     node_t *current = l->head;
     while (current != NULL) {
         if (current->key == key){
-            Pthread_mutex_unlock(&l->lock);
-            return 0;
+            rv = 0;
+            break;
         }
         current = current->next;
     }
     Pthread_mutex_unlock(&l->lock);
-    return -1;
+    return rv;
 }
 
 int main(int argc, char *argv[])
