@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  web:
+    image: os_net
+    container_name: os_net
+    command: ["tail", "-f", "/dev/null"]
+    volumes:
+      - ./:/app
