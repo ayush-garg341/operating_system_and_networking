@@ -4,7 +4,8 @@ int main(int argc, char* argv[]){
     int i;
     char c;
 
-    scanf("%d", &i);
+    int result = scanf("%d", &i);
+    printf("result: %d\n", result);
     printf("read: %d\n", i);
 
     printf("Let's check what is in the input buffer:");
