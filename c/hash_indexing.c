@@ -23,11 +23,7 @@ int main(int argc, char *argv[])
     // Take input from user whether to insert or search
     while(1){
         printf("Select an option 1 or 2 \n 1 - Insert \n 2 - search:\n ");
-        // scanf ignores whitespaces which is very convenient because we do not need to implement a function to strip the whitespace characters.
-
-        // Successful read from scanf returns 1 else 0. For 'abc' it will return 0 and for 2, 3, 4 it will return 1.
         if (scanf("%d", &option) != 1) {
-            // Clear the input buffer if invalid input is encountered
             while (getchar() != '\n');
             printf("Invalid input. Please enter an integer.\n");
             continue;
