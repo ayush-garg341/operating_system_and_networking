@@ -2,7 +2,6 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
-#include<stdint.h>
 
 void clear_input_buffer() {
     int ch;
@@ -15,7 +14,7 @@ int main(int argc, char *argv[])
 {
     ht *table = ht_create();
     int option;
-    int long write_pointer;
+    long write_pointer;
     FILE *file = fopen("example.txt", "r+");
     if (file == NULL) {
         perror("Error opening file for writing");
@@ -87,7 +86,7 @@ int main(int argc, char *argv[])
 
             printf("write pointer position = %ld\n", write_pointer);
 
-            ht_set(table, key, (void *)(intptr_t)write_pointer);
+            ht_set(table, key, &write_pointer);
 
             // Free the allocated memory
             free(result);
@@ -100,7 +99,7 @@ int main(int argc, char *argv[])
             char *read_key = NULL;
             size_t read_key_len = 0;
             size_t read_size;
-            int long read_pointer;
+            long *read_pointer;
 
             // do search using hash index
             puts("Enter the key which you want to read:");
@@ -112,11 +111,21 @@ int main(int argc, char *argv[])
                 // Remove newline character if present
                 read_key[strcspn(read_key, "\n")] = 0;
             }
-            read_pointer = (long int)(intptr_t)ht_get(table, read_key);
-            printf("read pointer position === %ld\n", read_pointer);
+            void* result = ht_get(table, read_key);
+            if(result != NULL){
+                printf("result is not null\n");
+                read_pointer = (long *)result;
+            }
+            else{
+                perror("Key not found\n");
+                fclose(file);
+                ht_destroy(table);
+                return -1;
+            }
+            printf("read pointer position === %ld\n", *read_pointer);
 
             // Seek to a specific position in the file
-            if (fseek(file, read_pointer, SEEK_SET) != 0) {
+            if (fseek(file, *read_pointer, SEEK_SET) != 0) {
                 perror("Error seeking in file");
                 fclose(file);
                 ht_destroy(table);
@@ -145,3 +154,4 @@ int main(int argc, char *argv[])
 
 // getchar is often used in a loop to clear the input buffer of unwanted characters. This is especially useful after using scanf to ensure the input buffer is clean before the next input operation.
 // compiling it with gcc -o hash.out hash_indexing.c hash_table/ht.c
+// TODO: Debug with gdb, what's happening ....
