@@ -1,0 +1,33 @@
+* GDB notes: 
+  ** info gdb
+  ** TUI - Text User Interface
+    *** ctrl-x-a : toggle to/from TUI mode
+    *** ctrl-l : refresh the screen
+    *** ctrl-p / ctrl-n : prev, next, commands
+    *** ctrl-x-2 : second window ( containing assembly code ); cycle through
+    *** Up-down arrows : go up and down in TUI mode.
+
+  ** gcc -g <c_file>
+  ** gdb <.out>
+  ** start -> start the debugger
+  ** next -> jump to next statement
+  ** list -> list the context ( some lines above and some lines below )
+
+  ** GDB has python interpreter
+    *** python 
+    *** python gdb.execute() to do gdb commands
+    *** python gdb.parse_and_eval() to get data from inferior
+    *** (gdb) python bp = gdb.Breakpoint('c/hello.c:9')
+    *** (gdb) python bp.enabled = False
+    *** python print (bp)
+    *** python print (bp.location) -> if one bp else use idx
+    *** print i
+    *** python var_i = gdb.parse_and_eval('i')
+    *** python print ('var_i is %d' % var_i)
+    *** python help('gdb') to get online help
+    *** set print pretty on
+
+  ** GDB has shell interpreter
+    *** shell ps
+
+  ** Reversible debugging
